@@ -45,7 +45,10 @@ class SpimexFiltersBase(BaseModel):
     ] = None
     delivery_type_id: Annotated[PriorityEnum | None, Field()] = None
     start_date: Annotated[date | None, Field(validate_default=True)] = None
-    end_date: Annotated[date | None, Field(validate_default=True), ] = None
+    end_date: Annotated[
+        date | None,
+        Field(validate_default=True),
+    ] = None
 
     @field_validator("start_date")
     @classmethod
@@ -60,7 +63,6 @@ class SpimexFiltersBase(BaseModel):
         if value is not None and value > date.today():
             raise ValueError("конец периода не может быть больше сегодняшнего дня")
         return value
-
 
 
 class Spimex(BaseModel):
