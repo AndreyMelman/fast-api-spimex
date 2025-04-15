@@ -1,28 +1,24 @@
-from typing import Annotated
+from fastapi import APIRouter
 
-from fastapi import (
-    APIRouter,
-    Depends,
-    Query,
+from schemas.spimex import (
+    SpimexTradingDate,
+    Spimex,
 )
-from sqlalchemy.ext.asyncio import AsyncSession
-from core.models import db_helper
-from crud.spimexs import SpimexCRUD
-
-from schemas.spimex import SpimexTradingDate, SpimexFiltersBase, Spimex
-from .dependencies import spimex_crud
+from api.dependencies.parametrs import (
+    SpimexFilters,
+    LimitDependency,
+    OffsetDependency,
+    SpimexCrud,
+)
 
 router = APIRouter(
     tags=["Spimex"],
 )
 
-SpimexFilters = Annotated[SpimexFiltersBase, Depends()]
-LimitDependency = Annotated[int, Query()]
-OffsetDependency = Annotated[int, Query()]
 
-@router.get("/", response_model=list[SpimexTradingDate])
+@router.get("/last_trading_dates/", response_model=list[SpimexTradingDate])
 async def get_last_trading_dates(
-    crud: Annotated[SpimexCRUD, Depends(spimex_crud)],
+    crud: SpimexCrud,
     limit: LimitDependency,
     offset: OffsetDependency = None,
 ):
@@ -32,9 +28,9 @@ async def get_last_trading_dates(
     )
 
 
-@router.get("/dynamics", response_model=list[Spimex])
+@router.get("/dynamics/", response_model=list[Spimex])
 async def get_dynamics(
-    crud: Annotated[SpimexCRUD, Depends(spimex_crud)],
+    crud: SpimexCrud,
     filters: SpimexFilters,
     limit: LimitDependency = None,
     offset: OffsetDependency = None,
