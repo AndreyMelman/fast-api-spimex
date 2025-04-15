@@ -15,9 +15,7 @@ class SpimexCRUD:
         self.session = session
 
     async def get_last_trading_dates(
-        self,
-        limit: int,
-        offset: int
+        self, limit: int, offset: int
     ) -> list[SpimexTradingDate]:
         stmt_dates = (
             select(Spimex.date)
@@ -30,7 +28,6 @@ class SpimexCRUD:
         dates = result_dates.scalars().all()
 
         return [SpimexTradingDate(date=d) for d in dates]
-
 
     async def get_dynamics(
         self,
@@ -61,7 +58,6 @@ class SpimexCRUD:
         dynamics = result.scalars().all()
 
         return list(dynamics)
-
 
     async def get_trading_results(self):
         pass
