@@ -1,13 +1,10 @@
-import enum
-
-from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, Result
 
 from core.models import Spimex
 from schemas.spimex import SpimexTradingDate
 
-from schemas.spimex import SpimexFiltersBase
+from schemas.spimex import SpimexFiltersDynamics, SpimexFiltersResults
 
 
 class SpimexCRUD:
@@ -31,7 +28,7 @@ class SpimexCRUD:
 
     async def get_dynamics(
         self,
-        filters: SpimexFiltersBase,
+        filters: SpimexFiltersDynamics,
         limit: int,
         offset: int,
     ) -> list[Spimex]:
@@ -59,5 +56,26 @@ class SpimexCRUD:
 
         return list(dynamics)
 
-    async def get_trading_results(self):
-        pass
+    async def get_trading_results(
+        self,
+        filters: SpimexFiltersResults,
+        limit: int,
+        offset: int,
+    ) -> list[Spimex]:
+        stmt = select(Spimex)
+
+        if filters.oil_id:
+            stmt = stmt.where(Spimex.oil_id == filters.oil_id)
+
+        if filters.delivery_basis_id:
+            stmt = stmt.where(Spimex.delivery_basis_id == filters.delivery_basis_id)
+
+        if filters.delivery_type_id:
+            stmt = stmt.where(Spimex.delivery_type_id == filters.delivery_type_id)
+
+        stmt = stmt.order_by(Spimex.date.desc()).limit(limit).offset(offset)
+
+        result: Result = await self.session.execute(stmt)
+        results = result.scalars().all()
+
+        return list(results)
