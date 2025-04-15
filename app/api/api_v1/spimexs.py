@@ -26,6 +26,14 @@ async def get_last_trading_dates(
     limit: LimitDependency = 100,
     offset: OffsetDependency = 0,
 ):
+    """
+    Эндпоинт для получения последних дат торгов
+
+    :param crud: сессия
+    :param limit: обязательный параметр для получения последних дат
+    :param offset: для пагинации
+    :return: список дат в формате JSON
+    """
     return await crud.get_last_trading_dates(
         limit=limit,
         offset=offset,
@@ -42,6 +50,14 @@ async def get_dynamics(
     limit: LimitDependency = 100,
     offset: OffsetDependency = 0,
 ):
+    """
+    Эндпоинт для получения фильтрованных данных торгов по дате
+    :param crud: сессия
+    :param filters: фильтрация данных, обязательные параметры start_date и end_date
+    :param limit: параметр для получения последних дат
+    :param offset: для пагинации
+    :return: возвращает список отфильтрованных данных в формате JSON
+    """
     return await crud.get_dynamics(
         filters=filters,
         limit=limit,
@@ -59,6 +75,14 @@ async def get_trading_results(
     limit: LimitDependency = 100,
     offset: OffsetDependency = 0,
 ):
+    """
+    Эндпоинт для получения фильтрованных данных торгов за последнюю дату
+    :param crud: сессия
+    :param filters: фильтрация данных, нет обязательных параметров
+    :param limit: параметр для получения последних дат
+    :param offset: для пагинации
+    :return: возвращает список отфильтрованных данных в формате JSON
+    """
     return await crud.get_trading_results(
         filters=filters,
         limit=limit,
