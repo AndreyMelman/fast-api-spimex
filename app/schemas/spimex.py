@@ -1,7 +1,13 @@
 import enum
 from typing import Annotated
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    field_validator,
+    model_validator,
+)
 from datetime import date
 
 
@@ -24,7 +30,7 @@ class SpimexTradingDate(BaseModel):
     date: Annotated[date, Field(...)]
 
 
-class SpimexFiltersBase(BaseModel):
+class SpimexFiltersResults(BaseModel):
     oil_id: Annotated[
         str | None,
         Field(
@@ -44,11 +50,11 @@ class SpimexFiltersBase(BaseModel):
         ),
     ] = None
     delivery_type_id: Annotated[PriorityEnum | None, Field()] = None
-    start_date: Annotated[date | None, Field(validate_default=True)] = None
-    end_date: Annotated[
-        date | None,
-        Field(validate_default=True),
-    ] = None
+
+
+class SpimexFiltersDynamics(SpimexFiltersResults):
+    start_date: Annotated[date, Field(validate_default=True)]
+    end_date: Annotated[date, Field(validate_default=True)]
 
     @field_validator("start_date")
     @classmethod
