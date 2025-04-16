@@ -11,6 +11,9 @@ from api.dependencies.params import (
     OffsetDependency,
     SpimexCrud,
 )
+from core.redis import redis_client
+from services.cache import redis_cache
+from ulils.time_utils import get_seconds_until_1411
 
 router = APIRouter(
     tags=["Spimex"],
@@ -21,6 +24,7 @@ router = APIRouter(
     "/last_trading_dates/",
     response_model=list[SpimexTradingDate],
 )
+@redis_cache(redis_client, ttl=get_seconds_until_1411())
 async def get_last_trading_dates(
     crud: SpimexCrud,
     limit: LimitDependency = 100,
@@ -44,6 +48,7 @@ async def get_last_trading_dates(
     "/dynamics/",
     response_model=list[Spimex],
 )
+@redis_cache(redis_client, ttl=get_seconds_until_1411())
 async def get_dynamics(
     crud: SpimexCrud,
     filters: SpimexFiltersD,
@@ -69,6 +74,7 @@ async def get_dynamics(
     "/results/",
     response_model=list[Spimex],
 )
+@redis_cache(redis_client, ttl=get_seconds_until_1411())
 async def get_trading_results(
     crud: SpimexCrud,
     filters: SpimexFiltersR,
