@@ -1,14 +1,14 @@
 import enum
+
 from typing import Annotated
+from datetime import date
 
 from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
     field_validator,
-    model_validator,
 )
-from datetime import date
 
 
 class PriorityEnum(str, enum.Enum):
@@ -57,14 +57,12 @@ class SpimexFiltersDynamics(SpimexFiltersResults):
     end_date: Annotated[date, Field(validate_default=True)]
 
     @field_validator("start_date")
-    @classmethod
     def validate_start_date(cls, value):
         if value is not None and value > date.today():
             raise ValueError("дата не может быть больше сегодняшнего дня")
         return value
 
     @field_validator("end_date")
-    @classmethod
     def validate_end_date(cls, value):
         if value is not None and value > date.today():
             raise ValueError("конец периода не может быть больше сегодняшнего дня")

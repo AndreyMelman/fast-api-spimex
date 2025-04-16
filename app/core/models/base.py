@@ -1,5 +1,9 @@
 from sqlalchemy import MetaData
-from sqlalchemy.orm import DeclarativeBase, mapped_column, Mapped
+from sqlalchemy.orm import (
+    DeclarativeBase,
+    mapped_column,
+    Mapped,
+)
 
 from core.config import settings
 

@@ -3,7 +3,10 @@ from fastapi import Depends, Query
 
 from api.dependencies.dependencies import spimex_crud
 from crud.spimexs import SpimexCRUD
-from schemas.spimex import SpimexFiltersDynamics, SpimexFiltersResults
+from schemas.spimex import (
+    SpimexFiltersDynamics,
+    SpimexFiltersResults,
+)
 
 
 SpimexCrud = Annotated[SpimexCRUD, Depends(spimex_crud)]

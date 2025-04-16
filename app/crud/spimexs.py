@@ -2,9 +2,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, Result
 
 from core.models import Spimex
-from schemas.spimex import SpimexTradingDate
 
-from schemas.spimex import SpimexFiltersDynamics, SpimexFiltersResults
+from schemas.spimex import (
+    SpimexFiltersDynamics,
+    SpimexFiltersResults,
+    SpimexTradingDate,
+)
 
 
 class SpimexCRUD:
