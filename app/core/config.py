@@ -1,4 +1,5 @@
 from datetime import datetime
+from pathlib import Path
 
 from pydantic import (
     BaseModel,
@@ -9,9 +10,15 @@ from pydantic_settings import (
     SettingsConfigDict,
 )
 
-from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+class RedisConfig(BaseSettings):
+    host: str = "localhost"
+    port: int = 6379
+    db: int = 0
+    decode_responses: bool = True
 
 
 class ApiV1Prefix(BaseModel):
@@ -67,6 +74,7 @@ class Settings(BaseSettings):
     cf: Config = Config()
     run: RunConfig = RunConfig()
     api: ApiPrefix = ApiPrefix()
+    redis: RedisConfig = RedisConfig()
 
 
 settings = Settings()
