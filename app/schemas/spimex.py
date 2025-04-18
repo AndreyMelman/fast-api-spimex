@@ -1,5 +1,6 @@
 import enum
 
+from fastapi import HTTPException
 from typing import Annotated
 from datetime import date
 
@@ -7,7 +8,7 @@ from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
-    field_validator,
+    field_validator, AfterValidator, model_validator,
 )
 
 
@@ -57,16 +58,32 @@ class SpimexFiltersDynamics(SpimexFiltersResults):
     end_date: Annotated[date, Field(validate_default=True)]
 
     @field_validator("start_date")
+    @classmethod
     def validate_start_date(cls, value):
-        if value is not None and value > date.today():
-            raise ValueError("дата не может быть больше сегодняшнего дня")
+        if value > date.today():
+            raise HTTPException(
+                status_code=400,
+                detail="Дата не может быть больше сегодняшнего дня"
+            )
         return value
 
     @field_validator("end_date")
+    @classmethod
     def validate_end_date(cls, value):
-        if value is not None and value > date.today():
-            raise ValueError("конец периода не может быть больше сегодняшнего дня")
+        if value > date.today():
+            raise HTTPException(
+                status_code=400,
+                detail="Конец периода не может быть больше сегодняшнего дня"
+            )
         return value
+
+    @model_validator(mode="after")
+    def validate_mode(self):
+        if self.start_date > self.end_date:
+            raise ValueError(
+                "Дата конца периода не должна быть больше начала периода"
+            )
+        return self
 
 
 class Spimex(BaseModel):
