@@ -8,6 +8,8 @@ from schemas.spimex import (
     SpimexFiltersResults,
 )
 
+CURRENT_LIMIT = 100
+CURRENT_OFFSET = 0
 
 SpimexCrud = Annotated[SpimexCRUD, Depends(spimex_crud)]
 SpimexFiltersD = Annotated[SpimexFiltersDynamics, Depends()]
