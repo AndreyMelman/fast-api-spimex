@@ -10,6 +10,8 @@ from api.dependencies.params import (
     LimitDependency,
     OffsetDependency,
     SpimexCrud,
+    CURRENT_LIMIT,
+    CURRENT_OFFSET,
 )
 from core.redis import redis_client
 from services.cache import redis_cache
@@ -27,8 +29,8 @@ router = APIRouter(
 @redis_cache(redis_client, ttl=get_seconds_until_1411())
 async def get_last_trading_dates(
     crud: SpimexCrud,
-    limit: LimitDependency = 100,
-    offset: OffsetDependency = 0,
+    limit: LimitDependency = CURRENT_LIMIT,
+    offset: OffsetDependency = CURRENT_OFFSET,
 ):
     """
     Эндпоинт для получения последних дат торгов
@@ -52,11 +54,12 @@ async def get_last_trading_dates(
 async def get_dynamics(
     crud: SpimexCrud,
     filters: SpimexFiltersD,
-    limit: LimitDependency = 100,
-    offset: OffsetDependency = 0,
+    limit: LimitDependency = CURRENT_LIMIT,
+    offset: OffsetDependency = CURRENT_OFFSET,
 ):
     """
     Эндпоинт для получения фильтрованных данных торгов по дате
+
     :param crud: сессия
     :param filters: фильтрация данных, обязательные параметры start_date и end_date
     :param limit: параметр для получения последних дат
@@ -78,8 +81,8 @@ async def get_dynamics(
 async def get_trading_results(
     crud: SpimexCrud,
     filters: SpimexFiltersR,
-    limit: LimitDependency = 100,
-    offset: OffsetDependency = 0,
+    limit: LimitDependency = CURRENT_LIMIT,
+    offset: OffsetDependency = CURRENT_OFFSET,
 ):
     """
     Эндпоинт для получения фильтрованных данных торгов за последнюю дату
