@@ -15,7 +15,7 @@ from pydantic import (
 class PriorityEnum(str, enum.Enum):
     A = "A"
     B = "B"
-    C = "D"
+    C = "C"
     D = "D"
     F = "F"
     J = "J"
@@ -25,6 +25,11 @@ class PriorityEnum(str, enum.Enum):
     S = "S"
     U = "U"
     W = "W"
+
+
+class Pagination(BaseModel):
+    limit: Annotated[int, Field(gt=0, lt=1000)] = 100
+    offset: Annotated[int, Field(ge=0)] = 0
 
 
 class SpimexTradingDate(BaseModel):
