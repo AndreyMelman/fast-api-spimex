@@ -14,6 +14,7 @@ from typing import (
 
 log = logging.getLogger(__name__)
 
+
 def make_cache_key(func_name: str, kwargs: dict) -> str:
     data_to_cache = jsonable_encoder(kwargs)
     filter_str = json.dumps(data_to_cache, sort_keys=True)
@@ -32,7 +33,9 @@ def redis_cache(redis_client: Redis, ttl: int):
                 if cached:
                     return json.loads(cached)
             except Exception as e:
-                log.warning(f"Redis unavailable (get). Skipping cache. Error: {e}")
+                log.warning(
+                    "Redis unavailable (get). Skipping cache. Error: e".format(e=e)
+                )
 
             result = await func(*args, **kwargs)
 
@@ -46,9 +49,12 @@ def redis_cache(redis_client: Redis, ttl: int):
                     ex=ttl,
                 )
             except Exception as e:
-                log.warning(f"Redis unavailable (set). Could not cache. Error: {e}")
+                log.warning(
+                    "Redis unavailable (set). Could not cache. Error: e".format(e=e)
+                )
 
             return result
 
         return wrapper
+
     return decorator
